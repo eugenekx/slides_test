@@ -672,7 +672,7 @@ function t_slds_initSliderSwipe(rec, totalSlides, windowWidth, sliderOptions) {
                 cycle = '',
                 distance = event.deltaX,
                 percentage = 100 / totalSlides * event.deltaX / $(window).innerWidth(),
-                sensitivity = 20,
+                sensitivity = 40,
                 stopSlider = sliderWrapper.attr('data-slider-stop');
             if (stopSlider == 'true') {
                 return !1;
