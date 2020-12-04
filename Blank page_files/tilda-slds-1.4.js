@@ -677,6 +677,9 @@ function t_slds_initSliderSwipe(rec, totalSlides, windowWidth, sliderOptions) {
             if (stopSlider == 'true') {
                 return !1;
             }
+
+            $('#touch-info').html(distance + ' ' + percentage + ' ' + sensitivity);
+
             sliderWrapper.attr('data-slider-touch', 'yes');
             t_slds_scrollImages(rec, (sliderWidth * pos) - distance);
             if (event.isFinal) {
