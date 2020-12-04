@@ -672,7 +672,7 @@ function t_slds_initSliderSwipe(rec, totalSlides, windowWidth, sliderOptions) {
                 cycle = '',
                 distance = event.deltaX,
                 percentage = 100 / totalSlides * event.deltaX / $(window).innerWidth(),
-                sensitivity = 40,
+                sensitivity = 50,
                 stopSlider = sliderWrapper.attr('data-slider-stop');
             if (stopSlider == 'true') {
                 return !1;
@@ -683,7 +683,7 @@ function t_slds_initSliderSwipe(rec, totalSlides, windowWidth, sliderOptions) {
             sliderWrapper.attr('data-slider-touch', 'yes');
             t_slds_scrollImages(rec, (sliderWidth * pos) - distance);
             if (event.isFinal) {
-                if (event.velocityX > 1) {
+                if (event.velocityX > 0.4) {
                     if (sliderWrapper.attr('data-slider-with-cycle') == 'false' && pos == 1) {
                         pos = 1;
                     } else {
@@ -695,7 +695,7 @@ function t_slds_initSliderSwipe(rec, totalSlides, windowWidth, sliderOptions) {
                     }
                     sliderWrapper.attr('data-slider-cycle', cycle);
                     t_slideMove(rec, false, sliderOptions);
-                } else if (event.velocityX < -1) {
+                } else if (event.velocityX < -0.4) {
                     if (sliderWrapper.attr('data-slider-with-cycle') == 'false'
                         && (pos == totalSlides || withSingleMove && pos == totalSlides - itemsInRow + 1)) {
                         pos = withSingleMove ? totalSlides - itemsInRow : totalSlides;
