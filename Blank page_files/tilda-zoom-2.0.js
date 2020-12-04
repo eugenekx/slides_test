@@ -234,6 +234,7 @@ function t_zoom_checkForScale() {
 
 function t_zoom_scale_init() {
     $('.t-zoomer__scale').css('display', 'block');
+    $('.t-zoomer__bg').css('cursor', 'zoom-in');
     if ($('.t-zoomer__scale').attr('data-zoom-scale-init') !== 'y') {
         $('.t-zoomer__scale').attr('data-zoom-scale-init', 'y');
         $('.t-zoomer__wrapper').on('click', '.t-zoomer__scale', function (e) {
