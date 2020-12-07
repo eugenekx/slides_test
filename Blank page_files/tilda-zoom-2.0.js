@@ -321,6 +321,7 @@ function t_zoomHandler() {
             t_zoom_close();
         } 
     });
+    $('body').css('overflow', 'hidden');
     t_zoom_initZoomerSwipe($('#rec257530563'));
     t_zoom_checkForScale();
 }
