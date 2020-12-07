@@ -32,7 +32,7 @@ function t_initZoom() {
         $('.t-records').on('click', '.t-slds__thumbs_gallery', t_zoomHandler);
         $('.t-zoomer__close').click(t_zoom_closeHandler);
         $('.t-zoomer__bg').click(function() {
-            if ($('.t-zoomer__scale').attr('data-zoom-scale-init') === 'y') {
+            if ($('.t-zoomer__scale').attr('data-zoom-scaled') === 'y') {
                 t_zoom_zoomHandler();
             } else {
                 $('.t-zoomer__close').trigger('click');
