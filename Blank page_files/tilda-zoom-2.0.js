@@ -65,6 +65,8 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
 
+            $('#zoom-info').html('<div style="position: fixed; top: 0; left: 0; width:200px; height: 50px; color: black; background: white">' + distance + '</div>');
+
             sliderWrapper.attr('data-slider-touch', 'yes');
             t_slds_scrollImages(rec, (zoomerHeight * pos) - distance);
             if (event.isFinal) {
