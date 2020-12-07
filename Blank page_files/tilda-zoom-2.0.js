@@ -71,6 +71,8 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
 
+            $(".t-zoomer__img").css('background', '#f00');
+
             t_zoom_scrollImages(rec, distance);
             if (event.isFinal) {
                 if (event.velocityX > 0.4) {
