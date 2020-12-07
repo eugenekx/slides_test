@@ -31,6 +31,7 @@ function t_initZoom() {
         $('.t-records').on('click', '.t-zoomable', t_zoomHandler);
         $('.t-records').on('click', '.t-slds__thumbs_gallery', t_zoomHandler);
         $('.t-zoomer__close, .t-zoomer__bg').click(t_zoom_closeHandler);
+        t_zoom_initZoomerSwipe($('.t-zoomer__wrapper'));
     }
 }
 
@@ -42,7 +43,7 @@ function t_zoom_scrollImages(rec, distance) {
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec);
-    var zoomerWrapper = el.find('.t-zoomer__wrapper');
+    var zoomerWrapper = el.find('.t-slds__items-wrapper');
 
     delete Hammer.defaults.cssProps.userSelect;
 
@@ -94,25 +95,17 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
 function t_slideMove(rec, withoutNewInterval, sliderOptions) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
         sliderWrapper = el.find('.t-slds__items-wrapper'),
-        itemsInRow = sliderWrapper.attr('data-slider-items-in-row'),
-        sliderWidth = itemsInRow && itemsInRow > 0 ? el.find('.t-slds__container .t-slds__item').width() : el.find('.t-slds__container').width(),
-        sliderTransition = parseFloat(sliderWrapper.attr('data-slider-transition'), 10),
-        pos = parseFloat(sliderWrapper.attr('data-slider-pos'), 10),
-        cycle = sliderWrapper.attr('data-slider-cycle');
+        zoomerHeight = el.find('.t-slds__items-wrapper').height(),
+        sliderTransition = parseFloat(sliderWrapper.attr('data-slider-transition'), 10) || 100;
 
     sliderWrapper.css({
-        transform: 'translateY(-' + (sliderWidth * pos) + 'px)'
+        transform: 'translateY(-' + (zoomerHeight * pos) + 'px)'
     });
 
     setTimeout(function() {
-        sliderWrapper.removeClass('t-slds_animated');
-        sliderWrapper.attr('data-slider-animated', '');
-        cycle = sliderWrapper.attr('data-slider-cycle');
-
         sliderWrapper.css({
-            transform: 'translateY(-' + (sliderWidth * pos) + 'px)'
+            transform: 'translateY(-' + (zoomerHeight * pos) + 'px)'
         });
-
     }, sliderTransition);
 }
 
