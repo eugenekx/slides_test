@@ -232,7 +232,7 @@ function t_zoomHandler() {
         if ($(this).hasClass('scale-active')) {
             t_zoom_unscale();
         } else if ($('.t-zoomer__scale').attr('data-zoom-scaled') === 'y') {
-            t_zoom_zoomHandler();
+            $('.t-zoomer__scale').trigger('click');
         }
          else {
             t_zoom_close();
