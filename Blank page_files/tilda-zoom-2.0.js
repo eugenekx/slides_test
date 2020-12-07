@@ -65,27 +65,27 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
 
         hammer.on('pan', function(event) {
             console.log('pan');
-            var sliderWrapper = el.find('.t-zoomer__img'),
-                zoomerHeight = el.find('.t-zoomer__img').height(),
+            var sliderWrapper = el.find('.t-carousel__zoomer__img'),
+                zoomerHeight = el.find('.t-carousel__zoomer__img').height(),
                 distance = event.deltaY,
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
 
-            $(".t-zoomer__img").css('background', '#f00');
+            $(".t-carousel__zoomer__img").css('width', '100px');
 
             t_zoom_scrollImages(rec, distance);
             if (event.isFinal) {
                 if (event.velocityX > 0.4) {
-                    $(".t-zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
+                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
                 } else if (event.velocityX < -0.4) {
-                    $(".t-zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
+                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
                 } else {
                     if (percentage <= -sensitivity) {
-                        $(".t-zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
+                        $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
                     } else if (percentage >= sensitivity) {
-                        $(".t-zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
+                        $(".t-carousel__zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
                     } else {
-                        $(".t-zoomer__img").css("transform", "translateY(" + 0 + "px)");
+                        $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
                     }
                 }
             }
