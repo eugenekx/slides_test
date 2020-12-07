@@ -5,6 +5,8 @@ function t_initZoom() {
         $("body").append('<div class="t-zoomer__wrapper">\
             <div class="t-zoomer__container">\
             </div>\
+            <div id="zoom-info">\
+            </div>\
             <div class="t-zoomer__bg"></div>\
             <div class="t-zoomer__close">\
                 <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">\
@@ -65,7 +67,7 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
 
-            $('#zoom-info').html('<div style="position: fixed; top: 0; left: 0; width:200px; height: 50px; color: black; background: white">' + distance + '</div>');
+            $('#zoom-info').html('<div style="position: fixed; top: 0; left: 0; height: 50px; color: black; background: white; z-index: 10000000;">Distance' + distance + ' height: ' + zoomerHeight + ' percentage: ' + percentage + '</div>');
 
             sliderWrapper.attr('data-slider-touch', 'yes');
             t_slds_scrollImages(rec, (zoomerHeight * pos) - distance);
