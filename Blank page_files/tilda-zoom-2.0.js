@@ -33,19 +33,19 @@ function t_initZoom() {
         $('.t-records').on('click', '.t-zoomable', t_zoomHandler);
         $('.t-records').on('click', '.t-slds__thumbs_gallery', t_zoomHandler);
         $('.t-zoomer__close, .t-zoomer__bg').click(t_zoom_closeHandler);
-        t_zoom_initZoomerSwipe($('.t-carousel__zoomer__img'));
+        t_zoom_initZoomerSwipe($('.t-zoomer__wrapper'));
     }
 }
 
 function t_zoom_scrollImages(rec, distance) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
         value = (distance < 0 ? "" : "-") + Math.abs(distance).toString();
-    el.find(".t-carousel__zoomer__img").css("transform", "translateY(" + value + "px)");
+    el.find(".t-zoomer__wrapper").css("transform", "translateY(" + value + "px)");
 }
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec);
-    var zoomerWrapper = el.find('.t-carousel__zoomer__img');
+    var zoomerWrapper = el.find('.t-zoomer__wrapper');
 
     delete Hammer.defaults.cssProps.userSelect;
 
@@ -54,15 +54,15 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
             domEvents: true,
             inputClass: Hammer.TouchInput,
             recognizers: [
-                [Hammer.Swipe, {
+                [Hammer.Pan, {
                     direction: Hammer.DIRECTION_VERTICAL
                 }]
             ]
         });
 
-        hammer.on('swipe', function(event) {
-            var sliderWrapper = el.find('.t-carousel__zoomer__img'),
-                zoomerHeight = el.find('.t-carousel__zoomer__img').height(),
+        hammer.on('pan', function(event) {
+            var sliderWrapper = el.find('.t-zoomer__wrapper'),
+                zoomerHeight = el.find('.t-zoomer__wrapper').height(),
                 distance = event.deltaY,
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
@@ -98,8 +98,8 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
 
 function t_slideMove(rec, withoutNewInterval, sliderOptions) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
-        sliderWrapper = el.find('.t-slds__items-wrapper'),
-        zoomerHeight = el.find('.t-slds__items-wrapper').height(),
+        sliderWrapper = el.find('.t-zoomer__wrapper'),
+        zoomerHeight = el.find('.t-zoomer__wrapper').height(),
         sliderTransition = parseFloat(sliderWrapper.attr('data-slider-transition'), 10) || 100;
 
     sliderWrapper.css({
