@@ -40,12 +40,12 @@ function t_initZoom() {
 function t_zoom_scrollImages(rec, distance) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
         value = (distance < 0 ? "" : "-") + Math.abs(distance).toString();
-    el.find(".t-zoomer__wrapper").css("transform", "translateY(" + value + "px)");
+    el.find(".t-zoomer__container").css("transform", "translateY(" + value + "px)");
 }
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec);
-    var zoomerWrapper = el.find('.t-zoomer__wrapper');
+    var zoomerWrapper = el.find('.t-zoomer__container');
 
     delete Hammer.defaults.cssProps.userSelect;
 
@@ -61,8 +61,8 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         });
 
         hammer.on('pan', function(event) {
-            var sliderWrapper = el.find('.t-zoomer__wrapper'),
-                zoomerHeight = el.find('.t-zoomer__wrapper').height(),
+            var sliderWrapper = el.find('.t-zoomer__container'),
+                zoomerHeight = el.find('.t-zoomer__container').height(),
                 distance = event.deltaY,
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
@@ -98,8 +98,8 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
 
 function t_slideMove(rec, withoutNewInterval, sliderOptions) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
-        sliderWrapper = el.find('.t-zoomer__wrapper'),
-        zoomerHeight = el.find('.t-zoomer__wrapper').height(),
+        sliderWrapper = el.find('.t-zoomer__container'),
+        zoomerHeight = el.find('.t-zoomer__container').height(),
         sliderTransition = parseFloat(sliderWrapper.attr('data-slider-transition'), 10) || 100;
 
     sliderWrapper.css({
