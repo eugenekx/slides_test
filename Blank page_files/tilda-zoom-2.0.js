@@ -5,8 +5,6 @@ function t_initZoom() {
         $("body").append('<div class="t-zoomer__wrapper">\
             <div class="t-zoomer__container">\
             </div>\
-            <div id="zoom-info">\
-            </div>\
             <div class="t-zoomer__bg"></div>\
             <div class="t-zoomer__close">\
                 <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">\
@@ -33,56 +31,70 @@ function t_initZoom() {
         $('.t-records').on('click', '.t-zoomable', t_zoomHandler);
         $('.t-records').on('click', '.t-slds__thumbs_gallery', t_zoomHandler);
         $('.t-zoomer__close, .t-zoomer__bg').click(t_zoom_closeHandler);
-        t_zoom_initZoomerSwipe($('.t-zoomer__wrapper'));
+        t_zoom_initZoomerSwipe($('#rec257530563'));
     }
 }
 
 function t_zoom_scrollImages(rec, distance) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
         value = (distance < 0 ? "" : "-") + Math.abs(distance).toString();
-    el.find(".t-zoomer__container").css("transform", "translateY(" + value + "px)");
+    el.find(".t-row").css("transform", "translateY(" + value + "px)");
 }
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
+    $('body').append('<div id="zoom-test" style="position:fixed; top: 0; left: 0; background: cyan; height: 200px; width: 100%;"></div>');
     var el = typeof rec === 'object' ? rec : $('#rec' + rec);
-    var zoomerWrapper = el.find('.t-zoomer__container');
+    var zoomerWrapper = el.find('.t-row');
 
     delete Hammer.defaults.cssProps.userSelect;
 
     if (zoomerWrapper.length > 0) {
-        hammer = new Hammer(zoomerWrapper[0], {
+        
+        var hammer = new Hammer($('#zoom-test')[0]);
+        hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+        hammer.on("pan", function(ev) {
+            $('#zoom-test')[0].textContent = ev.type +" gesture detected.";
+            $('#zoom-test').css("transform", "translateY(" + ev.deltaY + "px)");
+        });
+        
+
+        /*hammer = new Hammer(el[0], {
             domEvents: true,
             inputClass: Hammer.TouchInput,
             recognizers: [
                 [Hammer.Pan, {
-                    direction: Hammer.DIRECTION_HORIZONTAL
+                    direction: Hammer.DIRECTION_ALL
                 }]
             ]
-        });
+        })*/
 
         hammer.on('pan', function(event) {
-            var sliderWrapper = el.find('.t-zoomer__container'),
-                zoomerHeight = el.find('.t-zoomer__container').width(),
-                distance = event.deltaX,
-                percentage = 100 * event.deltaX / $(window).innerWidth(),
+            console.log('pan');
+            var sliderWrapper = el.find('.t-row'),
+                zoomerHeight = el.find('.t-row').width(),
+                distance = event.deltaY,
+                percentage = 100 * event.deltaY / $(window).innerWidth(),
                 sensitivity = 30;
 
-            $('#zoom-info').html('<div style="position: fixed; top: 0; left: 0; height: 50px; color: black; background: white; z-index: 10000000;">Distance' + distance + ' height: ' + zoomerHeight + ' percentage: ' + percentage + '</div>');
+            console.log('zh: ' + zoomerHeight);
+            console.log('d: ' + distance);
+            console.log('p: ' + percentage);
 
+            el.textContent = distance;
             sliderWrapper.attr('data-slider-touch', 'yes');
-            t_slds_scrollImages(rec, (zoomerHeight * pos) - distance);
+            t_zoom_scrollImages(rec, (zoomerHeight * pos) - distance);
             if (event.isFinal) {
                 if (event.velocityX > 0.4) {
-                    t_slideMove(rec, sliderOptions);
+                    t_zoom_slideMove(rec, sliderOptions);
                 } else if (event.velocityX < -0.4) {
-                    t_slideMove(rec, sliderOptions);
+                    t_zoom_slideMove(rec, sliderOptions);
                 } else {
                     if (percentage <= -sensitivity) {
-                        t_slideMove(rec, sliderOptions);
+                        t_zoom_slideMove(rec, sliderOptions);
                     } else if (percentage >= sensitivity) {
-                        t_slideMove(rec, sliderOptions);
+                        t_zoom_slideMove(rec, sliderOptions);
                     } else {
-                        t_slideMove(rec, sliderOptions);
+                        t_zoom_slideMove(rec, sliderOptions);
                     }
                 }
                 sliderWrapper.attr('data-slider-touch', '');
@@ -96,10 +108,10 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
 }
 
 
-function t_slideMove(rec, withoutNewInterval, sliderOptions) {
+function t_zoom_slideMove(rec, withoutNewInterval, sliderOptions) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
-        sliderWrapper = el.find('.t-zoomer__container'),
-        zoomerHeight = el.find('.t-zoomer__container').height(),
+        sliderWrapper = el.find('.t-container'),
+        zoomerHeight = el.find('.t-container').height(),
         sliderTransition = parseFloat(sliderWrapper.attr('data-slider-transition'), 10) || 100;
 
     sliderWrapper.css({
