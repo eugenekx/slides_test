@@ -55,16 +55,16 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
             inputClass: Hammer.TouchInput,
             recognizers: [
                 [Hammer.Pan, {
-                    direction: Hammer.DIRECTION_VERTICAL
+                    direction: Hammer.DIRECTION_HORIZONTAL
                 }]
             ]
         });
 
         hammer.on('pan', function(event) {
             var sliderWrapper = el.find('.t-zoomer__container'),
-                zoomerHeight = el.find('.t-zoomer__container').height(),
-                distance = event.deltaY,
-                percentage = 100 * event.deltaY / $(window).innerHeight(),
+                zoomerHeight = el.find('.t-zoomer__container').width(),
+                distance = event.deltaX,
+                percentage = 100 * event.deltaX / $(window).innerWidth(),
                 sensitivity = 30;
 
             $('#zoom-info').html('<div style="position: fixed; top: 0; left: 0; height: 50px; color: black; background: white; z-index: 10000000;">Distance' + distance + ' height: ' + zoomerHeight + ' percentage: ' + percentage + '</div>');
@@ -72,7 +72,7 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
             sliderWrapper.attr('data-slider-touch', 'yes');
             t_slds_scrollImages(rec, (zoomerHeight * pos) - distance);
             if (event.isFinal) {
-                if (event.velocityY > 0.4) {
+                if (event.velocityX > 0.4) {
                     t_slideMove(rec, sliderOptions);
                 } else if (event.velocityX < -0.4) {
                     t_slideMove(rec, sliderOptions);
@@ -103,12 +103,12 @@ function t_slideMove(rec, withoutNewInterval, sliderOptions) {
         sliderTransition = parseFloat(sliderWrapper.attr('data-slider-transition'), 10) || 100;
 
     sliderWrapper.css({
-        transform: 'translateY(-' + (zoomerHeight * pos) + 'px)'
+        transform: 'translateY(-' + zoomerHeight + 'px)'
     });
 
     setTimeout(function() {
         sliderWrapper.css({
-            transform: 'translateY(-' + (zoomerHeight * pos) + 'px)'
+            transform: 'translateY(-' + zoomerHeight + 'px)'
         });
     }, sliderTransition);
 }
