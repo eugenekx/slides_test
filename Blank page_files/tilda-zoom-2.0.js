@@ -35,7 +35,7 @@ function t_initZoom() {
 }
 
 function t_zoom_scrollImages(distance, percentage, ret) {
-    if (distance > 0) {
+    if (distance < 0) {
         return;
     }
 
@@ -188,7 +188,7 @@ function t_zoom_scaleHandler(e) {
     if (isTouchDevice) {
         return;
     }
-    
+
     var zoomedImage = $('.t-carousel__zoomer__item.active .t-carousel__zoomer__img');
     var zoomedWrapper = $('.t-zoomer__wrapper');
     var zoomerInner = $('.t-carousel__zoomer__inner');
@@ -380,7 +380,7 @@ function t_zoomHandler() {
             t_zoom_close();
         } 
     });
-    //$('body').css('overflow', 'hidden');
+
     t_zoom_checkForScale();
 }
 
