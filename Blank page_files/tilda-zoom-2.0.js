@@ -34,8 +34,26 @@ function t_initZoom() {
     }
 }
 
-function t_zoom_scrollImages(rec, distance) {
-    $(".t-carousel__zoomer__img").css("transform", "translateY(" + distance + "px)");
+function t_zoom_scrollImages(distance, percentage, ret) {
+    if (ret) {
+        $(".t-carousel__zoomer__img").addClass('t-zoomer_animated');
+        $('.t-carousel__zoomer__control_left').addClass('t-zoomer_animated');
+        $('.t-carousel__zoomer__control_right').addClass('t-zoomer_animated');
+    }
+    var k = Math.abs(percentage / 100) // k is a movement factor
+    var dist = 200;         // max distance in pixels
+    $('.t-carousel__zoomer__control_left').css('transform', 'translateX(' + -k * dist + 'px)');
+    $('.t-carousel__zoomer__control_right').css('transform', 'translateX(' + k * dist + 'px)');
+
+    $(".t-carousel__zoomer__img").css('transform', "translateY(" + distance + "px)");
+
+    if (ret) {
+        setTimeout(function() {
+            $(".t-carousel__zoomer__img").removeClass('t-zoomer_animated');
+            $('.t-carousel__zoomer__control_left').removeClass('t-zoomer_animated');
+            $('.t-carousel__zoomer__control_right').removeClass('t-zoomer_animated');
+        }, 300);
+    }
 }
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
@@ -61,7 +79,6 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         })*/
 
         hammer.on('pan', function(event) {
-            
             var sliderWrapper = el.find('.t-carousel__zoomer__img'),
                 zoomerHeight = el.find('.t-carousel__zoomer__img').height(),
                 distance = event.deltaY,
@@ -69,7 +86,7 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
                 sensitivity = 30;
 
             console.log('distance: ' + distance + ' percentage: ' + percentage);
-            t_zoom_scrollImages(rec, distance);
+            t_zoom_scrollImages(distance, percentage);
             if (event.isFinal) {
                 if (event.velocityX > 0.4) {
                     $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
@@ -100,13 +117,8 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
                 '</style>'
             );
             // ---
-
-            $(".t-carousel__zoomer__img").addClass('t-zoomer_animated');
-            $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
-
-            setTimeout(function() {
-                $(".t-carousel__zoomer__img").removeClass('t-zoomer_animated')  
-            }, 300);
+            
+            t_zoom_scrollImages(0, 0, true);      // return to initial state
         });
 }
 
