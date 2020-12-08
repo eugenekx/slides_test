@@ -36,22 +36,41 @@ function t_initZoom() {
 
 function t_zoom_scrollImages(distance, percentage, ret) {
     if (ret) {
-        $(".t-carousel__zoomer__img").addClass('t-zoomer_animated');
-        $('.t-carousel__zoomer__control_left').addClass('t-zoomer_animated');
-        $('.t-carousel__zoomer__control_right').addClass('t-zoomer_animated');
+        $('.t-carousel__zoomer__img').addClass('t-zoomer_animated-tranform');
+
+        $('.t-carousel__zoomer__control_left').addClass('t-zoomer_animated-tranform');
+        $('.t-carousel__zoomer__control_right').addClass('t-zoomer_animated-tranform');
+
+        $('.t-zoomer__scale').addClass('t-zoomer_animated-tranform');
+        $('.t-zoomer__close').addClass('t-zoomer_animated-tranform');
+
+        $('.t-zoomer__bg').addClass('t-zoomer_animated-opacity');
     }
     var k = Math.abs(percentage / 100) // k is a movement factor
     var dist = 200;         // max distance in pixels
+
     $('.t-carousel__zoomer__control_left').css('transform', 'translateX(' + -k * dist + 'px)');
     $('.t-carousel__zoomer__control_right').css('transform', 'translateX(' + k * dist + 'px)');
+    
+    $('.t-zoomer__close').css('transform', 'translateX(' + k * dist + 'px)');
+    $('.t-zoomer__scale').css('transform', 'translateX(' + k * dist + 'px)');
 
     $(".t-carousel__zoomer__img").css('transform', "translateY(" + distance + "px)");
 
+    console.log(k);
+    $(".t-zoomer__bg").css('opacity', 100 - k * 100 + '%');
+
     if (ret) {
         setTimeout(function() {
-            $(".t-carousel__zoomer__img").removeClass('t-zoomer_animated');
-            $('.t-carousel__zoomer__control_left').removeClass('t-zoomer_animated');
-            $('.t-carousel__zoomer__control_right').removeClass('t-zoomer_animated');
+            $(".t-carousel__zoomer__img").removeClass('t-zoomer_animated-tranform');
+            
+            $('.t-carousel__zoomer__control_left').removeClass('t-zoomer_animated-tranform');
+            $('.t-carousel__zoomer__control_right').removeClass('t-zoomer_animated-tranform');
+
+            $('.t-zoomer__scale').removeClass('t-zoomer_animated-tranform');
+            $('.t-zoomer__close').removeClass('t-zoomer_animated-tranform');
+
+            $('.t-zoomer__bg').removeClass('t-zoomer_animated-opacity');
         }, 300);
     }
 }
@@ -85,7 +104,6 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
 
-            console.log('distance: ' + distance + ' percentage: ' + percentage);
             t_zoom_scrollImages(distance, percentage);
             if (event.isFinal) {
                 if (event.velocityX > 0.4) {
@@ -108,16 +126,22 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
             // for debug
             $('body').append(
                 '<style>' +
-                '.t-zoomer_animated {' +
+                '.t-zoomer_animated-tranform {' +
                     '-webkit-transition: transform ease-in-out .3s;' +
                     '-moz-transition: transform ease-in-out .3s;' +
                     '-o-transition: transform ease-in-out .3s;' +
                     'transition: transform ease-in-out .3s' +
                 '}' +
+                '.t-zoomer_animated-opacity {' +
+                    '-webkit-transition: opacity ease-in-out .3s;' +
+                    '-moz-transition: opacity ease-in-out .3s;' +
+                    '-o-transition: opacity ease-in-out .3s;' +
+                    'transition: opacity ease-in-out .3s' +
+                '}' +
                 '</style>'
             );
             // ---
-            
+
             t_zoom_scrollImages(0, 0, true);      // return to initial state
         });
 }
