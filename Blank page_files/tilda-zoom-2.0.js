@@ -131,7 +131,6 @@ function t_zoom_initZoomerSwipe() {
             percentage = 100 * event.deltaY / $(window).innerHeight(),
             sensitivity = 40;
 
-        console.log(percentage);
         t_zoom_scrollImages(distance, percentage);
         if (event.isFinal) {
             if (event.velocityY < -0.4) {
@@ -147,7 +146,7 @@ function t_zoom_initZoomerSwipe() {
     hammer.on('panend', function() {
         if (el.data('swipeClose') !== 'y') {
             console.log('returning');
-            $el.data('swipeClose', 'n');
+            el.data('swipeClose', 'n');
             t_zoom_scrollImages(0, 0, true);      // return to initial state
         }
         
