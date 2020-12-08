@@ -78,7 +78,7 @@ function t_zoom_scrollImages(distance, percentage, ret) {
     }
 }
 
-function t_zoom_swipeClose() {
+function t_zoom_swipeClose(hammer) {
     t_zoom_scrollImages(-$(window).innerHeight(), 100, true);
 
     $(".t-carousel__zoomer__img").data('swipeClose', 'y');
@@ -91,10 +91,14 @@ function t_zoom_swipeClose() {
 
     $(".t-zoomer__bg").css('opacity', '100%');
 
+    hammer.off('pan');
+    hammer.off('panend');
+
     t_zoom_close();
 }
 
-function t_zoom_initZoomerSwipe(rec, sliderOptions) {
+function t_zoom_initZoomerSwipe() {
+    $('.t-carousel__zoomer__item.active')
     // for debug
     $('body').append(
         '<style>' +
@@ -114,56 +118,41 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
     );
     // ---
 
-    var zoomerWrapper = $('.t-zoomer__close');
-
     delete Hammer.defaults.cssProps.userSelect;
         
-        var hammer = new Hammer($('.t-carousel__zoomer__img')[0]);
-        hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-        /*hammer.on("pan", function(ev) {
-            $('.t-carousel__zoomer__img').css("transform", "translateY(" + ev.deltaY + "px)");
-        });*/
-        
-        /*hammer = new Hammer(el[0], {
-            domEvents: true,
-            inputClass: Hammer.TouchInput,
-            recognizers: [
-                [Hammer.Pan, {
-                    direction: Hammer.DIRECTION_ALL
-                }]
-            ]
-        })*/
+    var hammer = new Hammer($('.t-carousel__zoomer__item.active').find('.t-carousel__zoomer__img')[0]);
+    hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 
-        hammer.on('pan', function(event) {
-            var sliderWrapper = $('.t-carousel__zoomer__img'),
-                zoomerHeight = $('.t-carousel__zoomer__img').height(),
-                distance = event.deltaY,
-                percentage = 100 * event.deltaY / $(window).innerHeight(),
-                sensitivity = 30;
+    hammer.on('pan', function(event) {
+        var sliderWrapper = $('.t-carousel__zoomer__img'),
+            zoomerHeight = $('.t-carousel__zoomer__img').height(),
+            distance = event.deltaY,
+            percentage = 100 * event.deltaY / $(window).innerHeight(),
+            sensitivity = 30;
 
-            t_zoom_scrollImages(distance, percentage);
-            if (event.isFinal) {
-                if (event.velocityY < -0.4) {
-                    t_zoom_swipeClose();
+        t_zoom_scrollImages(distance, percentage);
+        if (event.isFinal) {
+            if (event.velocityY < -0.4) {
+                t_zoom_swipeClose(hammer);
+            } else {
+                if (percentage <= -sensitivity) {
+                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
+                } else if (percentage >= sensitivity) {
+                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
                 } else {
-                    if (percentage <= -sensitivity) {
-                        $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
-                    } else if (percentage >= sensitivity) {
-                        $(".t-carousel__zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
-                    } else {
-                        $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
-                    }
+                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
                 }
             }
-        });
+        }
+    });
 
-        hammer.on('panend', function() {
-            if ($(".t-carousel__zoomer__img").data('swipeClose') !== 'y') {
-                $(".t-carousel__zoomer__img").data('swipeClose', 'n');
-                t_zoom_scrollImages(0, 0, true);      // return to initial state
-            }
-            
-        });
+    hammer.on('panend', function() {
+        if ($(".t-carousel__zoomer__img").data('swipeClose') !== 'y') {
+            $(".t-carousel__zoomer__img").data('swipeClose', 'n');
+            t_zoom_scrollImages(0, 0, true);      // return to initial state
+        }
+        
+    });
 }
 
 
@@ -393,7 +382,6 @@ function t_zoomHandler() {
         } 
     });
     //$('body').css('overflow', 'hidden');
-    t_zoom_initZoomerSwipe($('#rec257530563'));
     t_zoom_checkForScale();
 }
 
@@ -444,6 +432,8 @@ function t_zoom_checkForScale() {
 }
 
 function t_zoom_scale_init() {
+    t_zoom_initZoomerSwipe();
+    
     $('.t-zoomer__scale').css('display', 'block');
 
     t_zoom_cursor_in();
