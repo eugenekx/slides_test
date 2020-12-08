@@ -37,11 +37,10 @@ function t_initZoom() {
 function t_zoom_scrollImages(rec, distance) {
     var el = typeof rec === 'object' ? rec : $('#rec' + rec),
         value = (distance < 0 ? "" : "-") + Math.abs(distance).toString();
-    $(".t-zoomer__img").css("transform", "translateY(" + value + "px)");
+    $(".t-carousel__zoomer__img").css("transform", "translateY(" + value + "px)");
 }
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
-    $('body').append('<div id="zoom-test" style="position:fixed; top: 0; left: 0; background: cyan; height: 200px; width: 100%;"></div>');
     var el = typeof rec === 'object' ? rec : $('#rec' + rec);
     var zoomerWrapper = el.find('.t-zoomer__close');
 
@@ -49,9 +48,9 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         
         var hammer = new Hammer($('.t-carousel__zoomer__img')[0]);
         hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-        hammer.on("pan", function(ev) {
+        /*hammer.on("pan", function(ev) {
             $('.t-carousel__zoomer__img').css("transform", "translateY(" + ev.deltaY + "px)");
-        });
+        });*/
         
         /*hammer = new Hammer(el[0], {
             domEvents: true,
@@ -64,15 +63,14 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         })*/
 
         hammer.on('pan', function(event) {
-            console.log('pan');
+            
             var sliderWrapper = el.find('.t-carousel__zoomer__img'),
                 zoomerHeight = el.find('.t-carousel__zoomer__img').height(),
                 distance = event.deltaY,
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
 
-            $(".t-carousel__zoomer__img").css('width', '100px');
-
+            console.log('distance: ' + distance + ' percentage: ' + percentage);
             t_zoom_scrollImages(rec, distance);
             if (event.isFinal) {
                 if (event.velocityX > 0.4) {
