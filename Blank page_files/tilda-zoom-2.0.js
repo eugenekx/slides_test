@@ -35,9 +35,7 @@ function t_initZoom() {
 }
 
 function t_zoom_scrollImages(rec, distance) {
-    var el = typeof rec === 'object' ? rec : $('#rec' + rec),
-        value = (distance < 0 ? "" : "-") + Math.abs(distance).toString();
-    $(".t-carousel__zoomer__img").css("transform", "translateY(" + value + "px)");
+    $(".t-carousel__zoomer__img").css("transform", "translateY(" + distance + "px)");
 }
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
@@ -89,9 +87,11 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
             }
         });
 
-        /*hammer.on('panend', function() {
-            $(".t-zoomer__img").css("transform", "translateY(" + 0 + "px)");
-        });*/
+        hammer.on('panend', function() {
+            $(".t-carousel__zoomer__img").addClass('t-zoomer_animated');
+            $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
+            $(".t-carousel__zoomer__img").removeClass('t-zoomer_animated');
+        });
 }
 
 
@@ -128,6 +128,7 @@ function t_zoom_closeHandler() {
 }
 
 function t_zoom_scaleHandler(e) {
+    return;
     var zoomedImage = $('.t-carousel__zoomer__item.active .t-carousel__zoomer__img');
     var zoomedWrapper = $('.t-zoomer__wrapper');
     var zoomerInner = $('.t-carousel__zoomer__inner');

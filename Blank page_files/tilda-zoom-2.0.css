@@ -316,6 +316,13 @@ img.t-carousel__zoomer__img.ui-draggable.ui-draggable-handle {
     opacity: .7
 }
 
+.t-zoomer_animated {
+    -webkit-transition: height ease-in-out .3s;
+    -moz-transition: height ease-in-out .3s;
+    -o-transition: height ease-in-out .3s;
+    transition: height ease-in-out .3s
+}
+
 @media screen and (max-width:768px) {
     .t-carousel__zoomer__control .t-carousel__zoomer__arrow {
         width: 12px;
