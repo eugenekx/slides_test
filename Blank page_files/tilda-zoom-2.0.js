@@ -88,6 +88,19 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         });
 
         hammer.on('panend', function() {
+            // for debug
+            $('body').append(
+                '<style>' +
+                '.t-zoomer_animated {' +
+                    '-webkit-transition: transform ease-in-out .3s;' +
+                    '-moz-transition: transform ease-in-out .3s;' +
+                    '-o-transition: transform ease-in-out .3s;' +
+                    'transition: transform ease-in-out .3s' +
+                '}' +
+                '</style>'
+            );
+            // ---
+
             $(".t-carousel__zoomer__img").addClass('t-zoomer_animated');
             $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
 
