@@ -90,7 +90,10 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         hammer.on('panend', function() {
             $(".t-carousel__zoomer__img").addClass('t-zoomer_animated');
             $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
-            $(".t-carousel__zoomer__img").removeClass('t-zoomer_animated');
+
+            setTimeout(function() {
+                $(".t-carousel__zoomer__img").removeClass('t-zoomer_animated')  
+            }, 300);
         });
 }
 
