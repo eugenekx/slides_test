@@ -78,6 +78,22 @@ function t_zoom_scrollImages(distance, percentage, ret) {
     }
 }
 
+function t_zoom_swipeClose() {
+    t_zoom_scrollImages(-$(window).innerHeight(), 100, true);
+
+    $(".t-carousel__zoomer__img").data('swipeClose', 'y');
+
+    $('.t-zoomer__close').css('transform', 'translateX(0px)');
+    $('.t-zoomer__scale').css('transform', 'translateX(0px)');
+
+    $('.t-carousel__zoomer__control_left').css('transform', 'translateX(0px)');
+    $('.t-carousel__zoomer__control_right').css('transform', 'translateX(0px)');
+
+    $(".t-zoomer__bg").css('opacity', '100%');
+
+    t_zoom_close();
+}
+
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
     // for debug
     $('body').append(
@@ -98,8 +114,7 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
     );
     // ---
 
-    var el = typeof rec === 'object' ? rec : $('#rec' + rec);
-    var zoomerWrapper = el.find('.t-zoomer__close');
+    var zoomerWrapper = $('.t-zoomer__close');
 
     delete Hammer.defaults.cssProps.userSelect;
         
@@ -120,8 +135,8 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         })*/
 
         hammer.on('pan', function(event) {
-            var sliderWrapper = el.find('.t-carousel__zoomer__img'),
-                zoomerHeight = el.find('.t-carousel__zoomer__img').height(),
+            var sliderWrapper = $('.t-carousel__zoomer__img'),
+                zoomerHeight = $('.t-carousel__zoomer__img').height(),
                 distance = event.deltaY,
                 percentage = 100 * event.deltaY / $(window).innerHeight(),
                 sensitivity = 30;
@@ -129,10 +144,7 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
             t_zoom_scrollImages(distance, percentage);
             if (event.isFinal) {
                 if (event.velocityY < -0.4) {
-                    t_zoom_scrollImages(-$(window).innerHeight(), 100, true);
-                    $(".t-carousel__zoomer__img").data('swipeClose', 'y');
-                    $(".t-zoomer__bg").css('opacity', '100%');
-                    t_zoom_close();
+                    t_zoom_swipeClose();
                 } else {
                     if (percentage <= -sensitivity) {
                         $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
