@@ -98,7 +98,6 @@ function t_zoom_swipeClose(hammer, el) {
 }
 
 function t_zoom_initZoomerSwipe() {
-    $('.t-carousel__zoomer__item.active')
     // for debug
     $('body').append(
         '<style>' +
@@ -121,7 +120,7 @@ function t_zoom_initZoomerSwipe() {
     delete Hammer.defaults.cssProps.userSelect;
         
     var el = $('.t-carousel__zoomer__item.active').find('.t-carousel__zoomer__img');
-    var hammer = new Hammer(el[0]);
+    var hammer = new Hammer(el[0], {inputClass: Hammer.TouchInput});
     hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 
     hammer.on('pan', function(event) {
@@ -145,11 +144,9 @@ function t_zoom_initZoomerSwipe() {
 
     hammer.on('panend', function() {
         if (el.data('swipeClose') !== 'y') {
-            console.log('returning');
             el.data('swipeClose', 'n');
             t_zoom_scrollImages(0, 0, true);      // return to initial state
         }
-        
     });
 }
 
@@ -187,7 +184,11 @@ function t_zoom_closeHandler() {
 }
 
 function t_zoom_scaleHandler(e) {
-    return;
+    var isTouchDevice = 'ontouchstart' in window;
+    if (isTouchDevice) {
+        return;
+    }
+    
     var zoomedImage = $('.t-carousel__zoomer__item.active .t-carousel__zoomer__img');
     var zoomedWrapper = $('.t-zoomer__wrapper');
     var zoomerInner = $('.t-carousel__zoomer__inner');
