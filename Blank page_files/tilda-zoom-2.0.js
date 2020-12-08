@@ -35,6 +35,10 @@ function t_initZoom() {
 }
 
 function t_zoom_scrollImages(distance, percentage, ret) {
+    if (distance > 0) {
+        return;
+    }
+
     if (ret) {
         $('.t-carousel__zoomer__img').addClass('t-zoomer_animated-tranform');
 
@@ -57,7 +61,6 @@ function t_zoom_scrollImages(distance, percentage, ret) {
 
     $(".t-carousel__zoomer__img").css('transform', "translateY(" + distance + "px)");
 
-    console.log(k);
     $(".t-zoomer__bg").css('opacity', 100 - k * 100 + '%');
 
     if (ret) {
@@ -76,6 +79,25 @@ function t_zoom_scrollImages(distance, percentage, ret) {
 }
 
 function t_zoom_initZoomerSwipe(rec, sliderOptions) {
+    // for debug
+    $('body').append(
+        '<style>' +
+        '.t-zoomer_animated-tranform {' +
+            '-webkit-transition: transform ease-in-out .3s;' +
+            '-moz-transition: transform ease-in-out .3s;' +
+            '-o-transition: transform ease-in-out .3s;' +
+            'transition: transform ease-in-out .3s' +
+        '}' +
+        '.t-zoomer_animated-opacity {' +
+            '-webkit-transition: opacity ease-in-out .3s;' +
+            '-moz-transition: opacity ease-in-out .3s;' +
+            '-o-transition: opacity ease-in-out .3s;' +
+            'transition: opacity ease-in-out .3s' +
+        '}' +
+        '</style>'
+    );
+    // ---
+
     var el = typeof rec === 'object' ? rec : $('#rec' + rec);
     var zoomerWrapper = el.find('.t-zoomer__close');
 
@@ -106,10 +128,11 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
 
             t_zoom_scrollImages(distance, percentage);
             if (event.isFinal) {
-                if (event.velocityX > 0.4) {
-                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
-                } else if (event.velocityX < -0.4) {
-                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
+                console.log(event.velocityY);
+                if (event.velocityY < -0.4) {
+                    t_zoom_scrollImages(-$(window).innerHeight(), 100, true);
+                    $(".t-carousel__zoomer__img").data('swipeClose', 'y');
+                    t_zoom_close();
                 } else {
                     if (percentage <= -sensitivity) {
                         $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
@@ -123,26 +146,11 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
         });
 
         hammer.on('panend', function() {
-            // for debug
-            $('body').append(
-                '<style>' +
-                '.t-zoomer_animated-tranform {' +
-                    '-webkit-transition: transform ease-in-out .3s;' +
-                    '-moz-transition: transform ease-in-out .3s;' +
-                    '-o-transition: transform ease-in-out .3s;' +
-                    'transition: transform ease-in-out .3s' +
-                '}' +
-                '.t-zoomer_animated-opacity {' +
-                    '-webkit-transition: opacity ease-in-out .3s;' +
-                    '-moz-transition: opacity ease-in-out .3s;' +
-                    '-o-transition: opacity ease-in-out .3s;' +
-                    'transition: opacity ease-in-out .3s' +
-                '}' +
-                '</style>'
-            );
-            // ---
-
-            t_zoom_scrollImages(0, 0, true);      // return to initial state
+            if ($(".t-carousel__zoomer__img").data('swipeClose') !== 'y') {
+                $(".t-carousel__zoomer__img").data('swipeClose', 'n');
+                t_zoom_scrollImages(0, 0, true);      // return to initial state
+            }
+            
         });
 }
 
@@ -372,7 +380,7 @@ function t_zoomHandler() {
             t_zoom_close();
         } 
     });
-    $('body').css('overflow', 'hidden');
+    //$('body').css('overflow', 'hidden');
     t_zoom_initZoomerSwipe($('#rec257530563'));
     t_zoom_checkForScale();
 }
