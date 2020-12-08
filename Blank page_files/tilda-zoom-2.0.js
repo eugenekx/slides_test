@@ -78,10 +78,10 @@ function t_zoom_scrollImages(distance, percentage, ret) {
     }
 }
 
-function t_zoom_swipeClose(hammer) {
+function t_zoom_swipeClose(hammer, el) {
     t_zoom_scrollImages(-$(window).innerHeight(), 100, true);
 
-    $(".t-carousel__zoomer__img").data('swipeClose', 'y');
+    el.data('swipeClose', 'y');
 
     $('.t-zoomer__close').css('transform', 'translateX(0px)');
     $('.t-zoomer__scale').css('transform', 'translateX(0px)');
@@ -120,7 +120,8 @@ function t_zoom_initZoomerSwipe() {
 
     delete Hammer.defaults.cssProps.userSelect;
         
-    var hammer = new Hammer($('.t-carousel__zoomer__item.active').find('.t-carousel__zoomer__img')[0]);
+    var el = $('.t-carousel__zoomer__item.active').find('.t-carousel__zoomer__img');
+    var hammer = new Hammer(el[0]);
     hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 
     hammer.on('pan', function(event) {
@@ -128,27 +129,25 @@ function t_zoom_initZoomerSwipe() {
             zoomerHeight = $('.t-carousel__zoomer__img').height(),
             distance = event.deltaY,
             percentage = 100 * event.deltaY / $(window).innerHeight(),
-            sensitivity = 30;
+            sensitivity = 40;
 
+        console.log(percentage);
         t_zoom_scrollImages(distance, percentage);
         if (event.isFinal) {
             if (event.velocityY < -0.4) {
-                t_zoom_swipeClose(hammer);
+                t_zoom_swipeClose(hammer, el);
             } else {
                 if (percentage <= -sensitivity) {
-                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + zoomerHeight + "px)");
-                } else if (percentage >= sensitivity) {
-                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + -zoomerHeight + "px)");
-                } else {
-                    $(".t-carousel__zoomer__img").css("transform", "translateY(" + 0 + "px)");
+                    t_zoom_swipeClose(hammer, el);
                 }
             }
         }
     });
 
     hammer.on('panend', function() {
-        if ($(".t-carousel__zoomer__img").data('swipeClose') !== 'y') {
-            $(".t-carousel__zoomer__img").data('swipeClose', 'n');
+        if (el.data('swipeClose') !== 'y') {
+            console.log('returning');
+            $el.data('swipeClose', 'n');
             t_zoom_scrollImages(0, 0, true);      // return to initial state
         }
         
@@ -433,7 +432,7 @@ function t_zoom_checkForScale() {
 
 function t_zoom_scale_init() {
     t_zoom_initZoomerSwipe();
-    
+
     $('.t-zoomer__scale').css('display', 'block');
 
     t_zoom_cursor_in();
