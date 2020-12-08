@@ -79,7 +79,7 @@ function t_zoom_scrollImages(distance, percentage, ret) {
 }
 
 function t_zoom_swipeClose(hammer, el) {
-    t_zoom_scrollImages(-$(window).innerHeight(), 100, true);
+    t_zoom_scrollImages($(window).innerHeight(), 100, true);
 
     el.data('swipeClose', 'y');
 
@@ -124,15 +124,13 @@ function t_zoom_initZoomerSwipe() {
     hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 
     hammer.on('pan', function(event) {
-        var sliderWrapper = $('.t-carousel__zoomer__img'),
-            zoomerHeight = $('.t-carousel__zoomer__img').height(),
-            distance = event.deltaY,
+        var distance = event.deltaY,
             percentage = 100 * event.deltaY / $(window).innerHeight(),
             sensitivity = 40;
 
         t_zoom_scrollImages(distance, percentage);
         if (event.isFinal) {
-            if (event.velocityY < -0.4) {
+            if (event.velocityY > 0.4) {
                 t_zoom_swipeClose(hammer, el);
             } else {
                 if (percentage <= -sensitivity) {
