@@ -128,10 +128,10 @@ function t_zoom_initZoomerSwipe(rec, sliderOptions) {
 
             t_zoom_scrollImages(distance, percentage);
             if (event.isFinal) {
-                console.log(event.velocityY);
                 if (event.velocityY < -0.4) {
                     t_zoom_scrollImages(-$(window).innerHeight(), 100, true);
                     $(".t-carousel__zoomer__img").data('swipeClose', 'y');
+                    $(".t-zoomer__bg").css('opacity', '100%');
                     t_zoom_close();
                 } else {
                     if (percentage <= -sensitivity) {
