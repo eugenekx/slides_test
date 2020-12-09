@@ -130,12 +130,8 @@ function t_zoom_initZoomerSwipe() {
 
         t_zoom_scrollImages(distance, percentage);
         if (event.isFinal) {
-            if (event.velocityY > 0.4) {
+            if (event.velocityY > 0.4 || percentage <= -sensitivity) {
                 t_zoom_swipeClose(hammer, el);
-            } else {
-                if (percentage <= -sensitivity) {
-                    t_zoom_swipeClose(hammer, el);
-                }
             }
         }
     });
