@@ -1,4 +1,23 @@
 function t_initZoom() {
+    // for debug
+    $('body').append(
+        '<style>' +
+        '.t-zoomer_animated-tranform {' +
+            '-webkit-transition: transform ease-in-out .3s;' +
+            '-moz-transition: transform ease-in-out .3s;' +
+            '-o-transition: transform ease-in-out .3s;' +
+            'transition: transform ease-in-out .3s' +
+        '}' +
+        '.t-zoomer_animated-opacity {' +
+            '-webkit-transition: opacity ease-in-out .3s;' +
+            '-moz-transition: opacity ease-in-out .3s;' +
+            '-o-transition: opacity ease-in-out .3s;' +
+            'transition: opacity ease-in-out .3s' +
+        '}' +
+        '</style>'
+    );
+    // ---
+
     if ($('[data-zoomable="yes"]').length) {
         window.tzoominited = true;
         $('[data-zoomable="yes"]:not(.t-slds__thumbs_gallery)').addClass("t-zoomable");
@@ -98,25 +117,6 @@ function t_zoom_swipeClose(hammer, el) {
 }
 
 function t_zoom_initZoomerSwipe() {
-    // for debug
-    $('body').append(
-        '<style>' +
-        '.t-zoomer_animated-tranform {' +
-            '-webkit-transition: transform ease-in-out .3s;' +
-            '-moz-transition: transform ease-in-out .3s;' +
-            '-o-transition: transform ease-in-out .3s;' +
-            'transition: transform ease-in-out .3s' +
-        '}' +
-        '.t-zoomer_animated-opacity {' +
-            '-webkit-transition: opacity ease-in-out .3s;' +
-            '-moz-transition: opacity ease-in-out .3s;' +
-            '-o-transition: opacity ease-in-out .3s;' +
-            'transition: opacity ease-in-out .3s' +
-        '}' +
-        '</style>'
-    );
-    // ---
-
     delete Hammer.defaults.cssProps.userSelect;
         
     var el = $('.t-carousel__zoomer__item.active').find('.t-carousel__zoomer__img');
@@ -182,11 +182,6 @@ function t_zoom_closeHandler() {
 }
 
 function t_zoom_scaleHandler(e) {
-    var isTouchDevice = 'ontouchstart' in window;
-    if (isTouchDevice) {
-        return;
-    }
-
     var zoomedImage = $('.t-carousel__zoomer__item.active .t-carousel__zoomer__img');
     var zoomedWrapper = $('.t-zoomer__wrapper');
     var zoomerInner = $('.t-carousel__zoomer__inner');
@@ -438,7 +433,9 @@ function t_zoom_scale_init() {
     $('.t-zoomer__scale').attr('data-zoom-scaled', 'y');
     if ($('.t-zoomer__scale').attr('data-zoom-scale-init') !== 'y') {
         $('.t-zoomer__scale').attr('data-zoom-scale-init', 'y');
-        $('.t-zoomer__wrapper').on('click', '.t-zoomer__scale', t_zoom_scaleHandler);
+        if (!window.isMobile) {
+            $('.t-zoomer__wrapper').on('click', '.t-zoomer__scale', t_zoom_scaleHandler);
+        }
     }
 }
 
