@@ -130,8 +130,12 @@ function t_zoom_initZoomerSwipe() {
 
         t_zoom_scrollImages(distance, percentage);
         if (event.isFinal) {
-            if (event.velocityY > 0.4 || percentage <= -sensitivity) {
+            if (event.velocityY > 0.4) {
                 t_zoom_swipeClose(hammer, el);
+            } else {
+                if (percentage <= -sensitivity) {
+                    t_zoom_swipeClose(hammer, el);
+                }
             }
         }
     });
@@ -178,6 +182,11 @@ function t_zoom_closeHandler() {
 }
 
 function t_zoom_scaleHandler(e) {
+    var isTouchDevice = 'ontouchstart' in window;
+    if (isTouchDevice) {
+        return;
+    }
+
     var zoomedImage = $('.t-carousel__zoomer__item.active .t-carousel__zoomer__img');
     var zoomedWrapper = $('.t-zoomer__wrapper');
     var zoomerInner = $('.t-carousel__zoomer__inner');
@@ -429,9 +438,7 @@ function t_zoom_scale_init() {
     $('.t-zoomer__scale').attr('data-zoom-scaled', 'y');
     if ($('.t-zoomer__scale').attr('data-zoom-scale-init') !== 'y') {
         $('.t-zoomer__scale').attr('data-zoom-scale-init', 'y');
-        if (!window.isMobile) {
-            $('.t-zoomer__wrapper').on('click', '.t-zoomer__scale', t_zoom_scaleHandler);
-        }
+        $('.t-zoomer__wrapper').on('click', '.t-zoomer__scale', t_zoom_scaleHandler);
     }
 }
 
